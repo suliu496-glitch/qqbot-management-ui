@@ -67,3 +67,76 @@
 ## 许可证
 
 本项目采用 MIT License，见 [`LICENSE`](LICENSE)。
+
+---
+
+## English
+
+A configurable QQ bot with a local frosted-glass management console. The starter configuration has no preset bot nickname, persona, administrators, contacts, or city. Configure your own accounts and preferences after cloning.
+
+> This release targets local use on Windows. QQ, NapCat, Python, and AI service credentials must be supplied by each user. Deep-task and file-related tools are disabled. The current OneBot client does not support an access token; do not expose it to the public Internet or use it on a shared server.
+
+### Screenshots
+
+Screenshots use synthetic test data only. They contain no real QQ accounts, conversations, or API keys.
+
+| Overview | Administrator management | Scheduled tasks |
+| --- | --- | --- |
+| ![Overview](docs/screenshots/overview.png) | ![Administrators](docs/screenshots/admins.png) | ![Scheduled tasks](docs/screenshots/tasks.png) |
+
+| Contact notes and nicknames | Persona settings |
+| --- | --- |
+| ![Contact management](docs/screenshots/contacts.png) | ![Persona settings](docs/screenshots/persona.png) |
+
+### Quick start
+
+1. Install 64-bit Windows 10/11, Python 3.11 or later with the `py` launcher, Git, QQ, and NapCat.
+2. Clone this repository, or download its ZIP archive and extract it to a writable folder:
+
+   ```powershell
+   git clone https://github.com/suliu496-glitch/qqbot-management-ui.git
+   cd qqbot-management-ui
+   ```
+
+3. Run `install.bat`. It creates a virtual environment, installs Python dependencies, and creates `.env` from `.env.example` if `.env` does not already exist.
+4. Edit `.env` locally and set `MY_QQ`, `MASTER_QQ`, `SELF_NICK`, and `DEEPSEEK_API_KEY`. Never commit or share `.env`.
+5. Edit `persona.txt` to choose the bot's personality. `roles.json` starts empty. Configure NapCat as described below.
+6. Log in to your own QQ/NapCat account, then run `start-qq-bot.bat`. Keep the console window open; the management UI opens automatically.
+7. First, verify messaging, administrator access, contact notes/nicknames, and scheduled tasks using only your own test account or group. Live QQ delivery has not been verified by this release.
+
+### Features
+
+- **Administrators:** View and add QQ accounts that can manage the bot. Contact notes do not grant permissions. Add only trusted accounts.
+- **Contact profiles:** Edit display notes, preferred nicknames, relationships, city, tags, personal notes, memories, and per-contact personas.
+- **Scheduled tasks:** Create, edit, pause, resume, and delete reminders. Choose a private or group destination, frequency, and message. Enabled tasks send messages on schedule; verify the destination and content before enabling them.
+- **Conversations:** View local records and pause automatic replies. Manual messages are sent as the bot and require confirmation in the UI.
+- **Persona and rules:** Set the global persona; per-contact settings live in each contact profile.
+- **Start and stop:** `start-qq-bot.bat` starts the bot and UI. `stop-qq-bot.bat` stops only this project's bot process; it does not stop QQ or NapCat.
+
+### Local NapCat connection
+
+In NapCat's OneBot v11 settings, enable an HTTP server and a forward WebSocket server, bound to `127.0.0.1` only. The default ports are `3000` and `3001`; `NAP_CAT_HTTP` and `NAP_CAT_WS` in `.env` must match. Do not expose these ports publicly or share NapCat credentials, login QR codes, or the management URL containing a `#token=` fragment.
+
+### Security and privacy
+
+- The repository contains no API keys, QQ login state, conversation database, contact data, backups, or local logs.
+- Keep credentials in the local `.env` file. The management UI does not return AI key values to the browser. `.env`, `data/`, SQLite databases, and logs are ignored by Git.
+- Automatic morning and daily digest messages are off by default (`QQBOT_AUTO_DIGEST=0`). User-created enabled tasks can still send messages.
+- The management UI listens on `127.0.0.1` and uses a temporary credential generated for each run. Use it only on the computer running the bot.
+- This release has not undergone a comprehensive security audit. OneBot token support is not implemented; the NapCat connection is suitable only for a trusted local environment. Do not expose the bot or UI publicly or use them as a shared server service.
+- Deep-task and file-operation tools are disabled. Cross-user conversation search is limited to administrators.
+
+### Configuration and troubleshooting
+
+- Required `.env` values: `MY_QQ` (bot account), `MASTER_QQ` (administrator QQ IDs, comma-separated), `SELF_NICK` (your chosen bot nickname), and `DEEPSEEK_API_KEY`.
+- Optional values include `ZHIPU_API_KEY`, `DEFAULT_CITY`, model service URLs, and NapCat endpoints. See `.env.example`.
+- **Missing configuration:** Check your local `.env`; never paste keys into support requests.
+- **QQ not connected:** Confirm QQ/NapCat is logged in, both OneBot endpoints bind to loopback, and the ports match `.env`.
+- **No AI reply:** Check the API key, account balance, model, and network. External API calls may incur charges.
+- **UI unavailable:** Open the page launched by the startup script. Restarting invalidates the previous temporary login credential. Never forward a URL containing `#token=`.
+
+Read [`AI部署说明.md`](AI部署说明.md) for the Chinese AI-assisted deployment guide, or [`docs/AI_DEPLOYMENT_EN.md`](docs/AI_DEPLOYMENT_EN.md) for English. Automated UI tests use temporary folders and synthetic data only.
+
+### License
+
+This project is released under the MIT License. See [`LICENSE`](LICENSE).
