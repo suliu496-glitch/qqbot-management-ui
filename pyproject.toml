@@ -1,0 +1,18 @@
+[project]
+name = "qq-mcp"
+version = "0.1.0"
+description = "QQ MCP Server"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.28.1",
+    "pydantic>=2,<3",
+    "pydantic-settings>=2,<3",
+    "mcp[cli]>=1.28.1,<2",
+    "python-docx>=1.1.2",
+    "websockets>=16.0",
+    "python-dotenv>=1.0",
+    "playwright>=1.61.0",
+]
+
+[project.scripts]
+qq-mcp = "server:main"
